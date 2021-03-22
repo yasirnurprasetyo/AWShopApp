@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.yasir.awshop.ui.activitys.ui.home.HomeFragment"
+        android:name="com.yasir.awshop.ui.fragments.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.yasir.awshop.ui.activitys.ui.dashboard.DashboardFragment"
+        android:id="@+id/navigation_keranjang"
+        android:name="com.yasir.awshop.ui.fragments.KeranjangFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_keranjang" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.yasir.awshop.ui.activitys.ui.notifications.NotificationsFragment"
+        android:name="com.yasir.awshop.ui.fragments.AkunFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_akun" />
 </navigation>
