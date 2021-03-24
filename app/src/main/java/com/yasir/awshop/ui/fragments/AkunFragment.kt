@@ -19,7 +19,7 @@ class AkunFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_akun, container, false)
+        val view : View = inflater.inflate(R.layout.fragment_akun, container, false)
         btnLogout = view.findViewById(R.id.btn_logout)
 
         s = SharedPref(requireActivity())

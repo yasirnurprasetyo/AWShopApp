@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yasir.awshop.helper.SharedPref
 import com.yasir.awshop.ui.activitys.LoginActivity
+import com.yasir.awshop.ui.activitys.MasukActivity
 import com.yasir.awshop.ui.fragments.AkunFragment
 import com.yasir.awshop.ui.fragments.HomeFragment
 import com.yasir.awshop.ui.fragments.KeranjangFragment
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                     if(s.getStatusLogin()){
                         callFragment(2, fragmentAkun)
                     } else {
-                        startActivity(Intent(this, LoginActivity::class.java))
+                        startActivity(Intent(this, MasukActivity::class.java))
                     }
                 }
             }
