@@ -10,7 +10,8 @@ import java.util.concurrent.TimeUnit
 
 object ApiConfig {
 //    private const val BASE_URL = Config.baseUrl + "api/"
-    private const val BASE_URL = "http://192.168.46.203/tokoonlineshop/public/api/"
+//    private const val BASE_URL = "http://192.168.46.203/tokoonlineshop/public/api/"
+    private const val BASE_URL = "http://192.168.43.23/tokoonlineshop/public/api/"
     private val client: Retrofit
         get() {
             val gson = GsonBuilder()
