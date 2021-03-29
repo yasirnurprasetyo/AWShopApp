@@ -12,13 +12,20 @@ import com.yasir.awshop.R
 import com.yasir.awshop.adapter.ProdukAdapter
 import com.yasir.awshop.adapter.SliderAdapter
 import com.yasir.awshop.model.Produk
+import com.yasir.awshop.model.ResponseModel
+import com.yasir.awshop.service.ApiConfig
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeFragment : Fragment() {
 
     lateinit var vpSlider : ViewPager
     lateinit var rvProduk : RecyclerView
-    lateinit var rvTerlaris : RecyclerView
+    lateinit var rvProdukTerlaris : RecyclerView
     lateinit var rvElektronik : RecyclerView
+
+    private var listProduk: ArrayList<Produk> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,12 +33,40 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
+        init(view)
+        getProduk()
+        displayProduk()
 
+        return view
+    }
+
+    fun getProduk() {
+        ApiConfig.instanceRetrofit.getProduk().enqueue(object : Callback<ResponseModel> {
+            override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
+            }
+
+            override fun onResponse(call: Call<ResponseModel>, response: Response<ResponseModel>) {
+                val res = response.body()!!
+                if (res.success == 1) {
+                    val arrayProduk = ArrayList<Produk>()
+                    for (p in res.produks) {
+                        arrayProduk.add(p)
+                    }
+                    listProduk = arrayProduk
+                    displayProduk()
+                }
+            }
+        })
+    }
+
+    fun init(view: View) {
         vpSlider = view.findViewById(R.id.vp_slider)
         rvProduk = view.findViewById(R.id.rv_produk)
-        rvTerlaris = view.findViewById(R.id.rv_produkTerlaris)
+        rvProdukTerlaris = view.findViewById(R.id.rv_produkTerlaris)
         rvElektronik = view.findViewById(R.id.rv_elektronik)
+    }
 
+    fun displayProduk(){
         val arraySlider = ArrayList<Int>()
         arraySlider.add(R.drawable.slider1)
         arraySlider.add(R.drawable.slider2)
@@ -49,92 +84,90 @@ class HomeFragment : Fragment() {
         val layoutManager2 = LinearLayoutManager(activity)
         layoutManager2.orientation = LinearLayoutManager.HORIZONTAL
 
-        rvProduk.adapter = ProdukAdapter(arrayProduk)
+        rvProduk.adapter = ProdukAdapter(requireActivity(), listProduk)
         rvProduk.layoutManager = layoutManager
 
-        rvTerlaris.adapter = ProdukAdapter(arrayTerlaris)
-        rvTerlaris.layoutManager = layoutManager1
+        rvProdukTerlaris.adapter = ProdukAdapter(requireActivity(), listProduk)
+        rvProdukTerlaris.layoutManager = layoutManager1
 
-        rvElektronik.adapter = ProdukAdapter(arrayElektronik)
+        rvElektronik.adapter = ProdukAdapter(requireActivity(), listProduk)
         rvElektronik.layoutManager = layoutManager2
-
-        return view
     }
 
-    val arrayProduk: ArrayList<Produk>get(){
-
-        val array = ArrayList<Produk>()
-
-        val p1 = Produk()
-        p1.nama = "HP Sungsang"
-        p1.harga = "Rp. 4.000.000"
-        p1.gambar = R.drawable.hp_14_bs749tu
-
-        val p2 = Produk()
-        p2.nama = "HP Remi"
-        p2.harga = "Rp. 4.000.000"
-        p2.gambar = R.drawable.hp_envy_13_aq0019tx
-
-        val p3 = Produk()
-        p3.nama = "HP Ono"
-        p3.harga = "Rp. 4.000.000"
-        p3.gambar = R.drawable.hp_pavilion_13_an0006na
-
-        array.add(p1)
-        array.add(p2)
-        array.add(p3)
-
-        return array
-    }
-    val arrayTerlaris: ArrayList<Produk>get(){
-
-        val array = ArrayList<Produk>()
-
-        val p1 = Produk()
-        p1.nama = "HP Sungsang"
-        p1.harga = "Rp. 4.000.000"
-        p1.gambar = R.drawable.hp_14_bs749tu
-
-        val p2 = Produk()
-        p2.nama = "HP Remi"
-        p2.harga = "Rp. 4.000.000"
-        p2.gambar = R.drawable.hp_envy_13_aq0019tx
-
-        val p3 = Produk()
-        p3.nama = "HP Ono"
-        p3.harga = "Rp. 4.000.000"
-        p3.gambar = R.drawable.hp_pavilion_13_an0006na
-
-        array.add(p1)
-        array.add(p2)
-        array.add(p3)
-
-        return array
-    }
-    val arrayElektronik: ArrayList<Produk>get(){
-
-        val array = ArrayList<Produk>()
-
-        val p1 = Produk()
-        p1.nama = "HP Sungsang"
-        p1.harga = "Rp. 4.000.000"
-        p1.gambar = R.drawable.hp_14_bs749tu
-
-        val p2 = Produk()
-        p2.nama = "HP Remi"
-        p2.harga = "Rp. 4.000.000"
-        p2.gambar = R.drawable.hp_envy_13_aq0019tx
-
-        val p3 = Produk()
-        p3.nama = "HP Ono"
-        p3.harga = "Rp. 4.000.000"
-        p3.gambar = R.drawable.hp_pavilion_13_an0006na
-
-        array.add(p1)
-        array.add(p2)
-        array.add(p3)
-
-        return array
-    }
+//    val arrayProduk: ArrayList<Produk>get(){
+//
+//        val array = ArrayList<Produk>()
+//
+//        val p1 = Produk()
+//        p1.nama = "HP Sungsang"
+//        p1.harga = "Rp. 4.000.000"
+//        p1.gambar = R.drawable.hp_14_bs749tu
+//
+//        val p2 = Produk()
+//        p2.nama = "HP Remi"
+//        p2.harga = "Rp. 4.000.000"
+//        p2.gambar = R.drawable.hp_envy_13_aq0019tx
+//
+//        val p3 = Produk()
+//        p3.nama = "HP Ono"
+//        p3.harga = "Rp. 4.000.000"
+//        p3.gambar = R.drawable.hp_pavilion_13_an0006na
+//
+//        array.add(p1)
+//        array.add(p2)
+//        array.add(p3)
+//
+//        return array
+//    }
+//    val arrayTerlaris: ArrayList<Produk>get(){
+//
+//        val array = ArrayList<Produk>()
+//
+//        val p1 = Produk()
+//        p1.nama = "HP Sungsang"
+//        p1.harga = "Rp. 4.000.000"
+//        p1.gambar = R.drawable.hp_14_bs749tu
+//
+//        val p2 = Produk()
+//        p2.nama = "HP Remi"
+//        p2.harga = "Rp. 4.000.000"
+//        p2.gambar = R.drawable.hp_envy_13_aq0019tx
+//
+//        val p3 = Produk()
+//        p3.nama = "HP Ono"
+//        p3.harga = "Rp. 4.000.000"
+//        p3.gambar = R.drawable.hp_pavilion_13_an0006na
+//
+//        array.add(p1)
+//        array.add(p2)
+//        array.add(p3)
+//
+//        return array
+//    }
+//    val arrayElektronik: ArrayList<Produk>get(){
+//
+//        val array = ArrayList<Produk>()
+//
+//        val p1 = Produk()
+//        p1.nama = "HP Sungsang"
+//        p1.harga = "Rp. 4.000.000"
+//        p1.gambar = R.drawable.hp_14_bs749tu
+//
+//        val p2 = Produk()
+//        p2.nama = "HP Remi"
+//        p2.harga = "Rp. 4.000.000"
+//        p2.gambar = R.drawable.hp_envy_13_aq0019tx
+//
+//        val p3 = Produk()
+//        p3.nama = "HP Ono"
+//        p3.harga = "Rp. 4.000.000"
+//        p3.gambar = R.drawable.hp_pavilion_13_an0006na
+//
+//        array.add(p1)
+//        array.add(p2)
+//        array.add(p3)
+//
+//        return array
+//    }
 
 }
