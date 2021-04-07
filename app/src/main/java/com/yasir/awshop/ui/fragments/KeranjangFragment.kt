@@ -9,15 +9,22 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yasir.awshop.R
 import com.yasir.awshop.adapter.KeranjangAdapter
 import com.yasir.awshop.adapter.ProdukAdapter
 import com.yasir.awshop.helper.Helper
+import com.yasir.awshop.helper.SharedPref
 import com.yasir.awshop.model.Produk
 import com.yasir.awshop.room.MyDatabase
+import com.yasir.awshop.ui.activitys.MasukActivity
 import com.yasir.awshop.ui.activitys.PengirimanActivity
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class KeranjangFragment : Fragment() {
 
@@ -31,6 +38,8 @@ class KeranjangFragment : Fragment() {
     lateinit var myDb: MyDatabase
     var listProduk = ArrayList<Produk>()
 
+    lateinit var s : SharedPref
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,6 +47,7 @@ class KeranjangFragment : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_keranjang, container, false)
         init(view)
         myDb = MyDatabase.getInstance(requireActivity())!!
+        s = SharedPref(requireActivity())
 
         mainButton()
         displayProduk()
@@ -69,13 +79,32 @@ class KeranjangFragment : Fragment() {
 
     private fun mainButton(){
         btnDelete.setOnClickListener {
+            val listDelete = ArrayList<Produk>()
+            for(p in listProduk){
+                if(p.selected) listDelete.add(p)
+            }
 
+            delete(listDelete)
         }
 
         btnBayar.setOnClickListener {
-            val intent = Intent(requireActivity(), PengirimanActivity::class.java)
-//            intent.putExtra("extra", "" + totalHarga)
-            startActivity(intent)
+
+            if(s.getStatusLogin()){
+                var isThereProduk = false
+                for(p in listProduk){
+                    if(p.selected) isThereProduk = true
+                }
+
+                if(isThereProduk){
+                    val intent = Intent(requireActivity(), PengirimanActivity::class.java)
+                    intent.putExtra("extra", "" + totalHarga)
+                    startActivity(intent)
+                }else{
+                    Toast.makeText(requireContext(), "Tidak ada produk yang terpilih", Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                requireActivity().startActivity(Intent(requireActivity(), MasukActivity::class.java))
+            }
         }
 
         cbAll.setOnClickListener {
@@ -88,7 +117,18 @@ class KeranjangFragment : Fragment() {
         }
     }
 
-    var totalHarga = 0
+    private fun delete(data: ArrayList<Produk>) {
+        CompositeDisposable().add(Observable.fromCallable { myDb.daoKeranjang().delete(data) }
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    listProduk.clear()
+                    listProduk.addAll(myDb.daoKeranjang().getAll() as ArrayList)
+                    adapter.notifyDataSetChanged()
+                })
+    }
+
+    var totalHarga = 0  
     fun hitungTotal() {
         val listProduk = myDb.daoKeranjang().getAll() as ArrayList
         totalHarga = 0

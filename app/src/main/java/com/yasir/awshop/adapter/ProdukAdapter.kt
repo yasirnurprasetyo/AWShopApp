@@ -2,6 +2,7 @@ package com.yasir.awshop.adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ class ProdukAdapter(var activity: Activity, var data : ArrayList<Produk>):Recycl
      class Holder(view : View):RecyclerView.ViewHolder(view){
          val tvNama = view.findViewById<TextView>(R.id.tv_nama)
          val tvHarga = view.findViewById<TextView>(R.id.tv_harga)
+         val tvHargaAsli = view.findViewById<TextView>(R.id.tv_hargaAsli)
          val imgProduk = view.findViewById<ImageView>(R.id.img_produk)
          val layout = view.findViewById<CardView>(R.id.layout)
     }
@@ -37,8 +39,20 @@ class ProdukAdapter(var activity: Activity, var data : ArrayList<Produk>):Recycl
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
+
+        val a = data[position]
+
+        var hargaAsli = Integer.valueOf(a.harga)
+        var harga = Integer.valueOf(a.harga)
+
+        if(a.discount != 0){
+            harga -= a.discount
+        }
+
+        holder.tvHargaAsli.text = Helper().formatRupiah(hargaAsli)
+        holder.tvHargaAsli.paintFlags = holder.tvHargaAsli.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         holder.tvNama.text = data[position].name
-        holder.tvHarga.text = Helper().formatRupiah(data[position].harga)
+        holder.tvHarga.text = Helper().formatRupiah(harga)
 //        holder.imgProduk.setImageResource(data[position].image)
         val image = Config.productUrl + data[position].image
         Picasso.get()

@@ -50,6 +50,8 @@ class HomeFragment : Fragment() {
                 if (res.success == 1) {
                     val arrayProduk = ArrayList<Produk>()
                     for (p in res.produks) {
+//                      anggap discount all 2000
+                        p.discount = 2000
                         arrayProduk.add(p)
                     }
                     listProduk = arrayProduk
@@ -93,81 +95,4 @@ class HomeFragment : Fragment() {
         rvElektronik.adapter = ProdukAdapter(requireActivity(), listProduk)
         rvElektronik.layoutManager = layoutManager2
     }
-
-//    val arrayProduk: ArrayList<Produk>get(){
-//
-//        val array = ArrayList<Produk>()
-//
-//        val p1 = Produk()
-//        p1.nama = "HP Sungsang"
-//        p1.harga = "Rp. 4.000.000"
-//        p1.gambar = R.drawable.hp_14_bs749tu
-//
-//        val p2 = Produk()
-//        p2.nama = "HP Remi"
-//        p2.harga = "Rp. 4.000.000"
-//        p2.gambar = R.drawable.hp_envy_13_aq0019tx
-//
-//        val p3 = Produk()
-//        p3.nama = "HP Ono"
-//        p3.harga = "Rp. 4.000.000"
-//        p3.gambar = R.drawable.hp_pavilion_13_an0006na
-//
-//        array.add(p1)
-//        array.add(p2)
-//        array.add(p3)
-//
-//        return array
-//    }
-//    val arrayTerlaris: ArrayList<Produk>get(){
-//
-//        val array = ArrayList<Produk>()
-//
-//        val p1 = Produk()
-//        p1.nama = "HP Sungsang"
-//        p1.harga = "Rp. 4.000.000"
-//        p1.gambar = R.drawable.hp_14_bs749tu
-//
-//        val p2 = Produk()
-//        p2.nama = "HP Remi"
-//        p2.harga = "Rp. 4.000.000"
-//        p2.gambar = R.drawable.hp_envy_13_aq0019tx
-//
-//        val p3 = Produk()
-//        p3.nama = "HP Ono"
-//        p3.harga = "Rp. 4.000.000"
-//        p3.gambar = R.drawable.hp_pavilion_13_an0006na
-//
-//        array.add(p1)
-//        array.add(p2)
-//        array.add(p3)
-//
-//        return array
-//    }
-//    val arrayElektronik: ArrayList<Produk>get(){
-//
-//        val array = ArrayList<Produk>()
-//
-//        val p1 = Produk()
-//        p1.nama = "HP Sungsang"
-//        p1.harga = "Rp. 4.000.000"
-//        p1.gambar = R.drawable.hp_14_bs749tu
-//
-//        val p2 = Produk()
-//        p2.nama = "HP Remi"
-//        p2.harga = "Rp. 4.000.000"
-//        p2.gambar = R.drawable.hp_envy_13_aq0019tx
-//
-//        val p3 = Produk()
-//        p3.nama = "HP Ono"
-//        p3.harga = "Rp. 4.000.000"
-//        p3.gambar = R.drawable.hp_pavilion_13_an0006na
-//
-//        array.add(p1)
-//        array.add(p2)
-//        array.add(p3)
-//
-//        return array
-//    }
-
 }
